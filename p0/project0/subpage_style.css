@@ -40,6 +40,10 @@ table{
 #homepageLink{
     font-size: large;
 }
+ul{
+    list-style-type:none;
+    margin:auto;
+  }
 @media(max-width:700px){
     
     tr{
