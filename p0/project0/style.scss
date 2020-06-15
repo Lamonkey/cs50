@@ -1,0 +1,52 @@
+$descriptionPadding: 10px 20px;
+
+$headerFont: Impact, Charcoal, sans-serif;
+
+$boxShadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+$imgWidth: 100%;
+
+$imgHeight: 100%;
+
+%LRmargin {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+%TBmargin {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+h1 {
+    text-align: center;
+    font-family: $headerFont;
+}
+img {
+    max-width: $imgWidth;
+    max-height: $imgHeight;
+    display: block;
+    @extend %LRmargin;
+}
+.painting {
+    @extend %LRmargin;
+    @extend %TBmargin;
+    /* width: 60%; */
+    background-color: white;
+    box-shadow: $boxShadow;
+    margin-bottom: 25px;
+}
+.description {
+    text-align: center;
+    padding: 10px 20px;
+}
+.description p {
+    font-weight: 500;
+    font-style: normal;
+    font-size: large;
+}
+div {
+    a:link {
+        color: black;
+    }
+}
