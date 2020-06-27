@@ -13,8 +13,6 @@ class Controller():
         self.books = []
         #logined user
         self.user = None
-        #All the review
-        self.reviews = []
        # if not os.getenv("DATABASE_URL"):
           #  raise RuntimeError("DATABASE_URL is not set")
         #self.engine = create_engine(os.getenv("DATABASE_URL"))
@@ -49,5 +47,43 @@ class Controller():
 
     def logout(self):
         self.user = None
+    
+    def addBook(self,book):
+        try:
+            self.db.execute("INSERT INTO books (title,author,year,isbn,review_count,average_score) VALUES (:title,:author,:year,:isbn,:reviewCount,:aveScore);",
+            {"title":book.title, "author":book.author, "year":book.year, "isbn":book.isbn,"reviewCount":book.reviewCount, "aveScore":book.aveScore})
+            self.db.commit()
+        except Exception:
+            print("book can't not be imported")
+    def addReview(self,input,book):
+        try:
+            tmp = Review(input,book)
+            self.db.execute("INSERT INTO reviews (review,book,publisher) VALUES(:review,:book,:publisher);",
+            {"review":input, "book":str(book.isbn), "publisher":self.user.userName})
+            self.db.commit()
+            self.user.reviews.append(tmp)
+            
+        except Exception:
+            print("Please input a valid review")
+
+    def search(self,isbn = "",title= "",author= ""):
+        if self.user == None:
+            raise RuntimeError("please log in or create an account")
+        isbn = "%" + str(isbn) + "%"
+        title = "%" + title + "%"
+        author ="%" + author + "%"
+        result = self.db.execute("SELECT * FROM books WHERE isbn LIKE :isbn AND title LIKE :title AND author LIKE :author;",
+        {"isbn":isbn, "title":title, "author":author})
+        if result.rowcount == 0:
+            print("no result find")
+        for book in result:
+            print(f"isbn is {book.isbn}, title is:{book.title},author is:{book.author}")
+        
+         
+        
+         
+     
+            
         
 
+            
