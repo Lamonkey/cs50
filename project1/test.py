@@ -34,9 +34,18 @@ def testSearch():
     driver.search(title = "readable code")
     driver.search(author = "Boswell")
     pass
-
+def testGoodReadAPI():
+    driver = Controller()
+    assert(driver.login("user4","ps4"))
+    book = Book(title = "Krondor: The Betrayal", isbn = "380795272", author = "Raymond E. Feist", year = 1998)
+    book2 = Book(title = "The Dark Is Rising",isbn = "1416949658",author = "Susan Cooper",year = 2000 ) 
+    book3 = Book(title = "",isbn = "1632168146",author = "",year = 2000 ) 
+    driver.searchFromGoodReads(book)
+    driver.searchFromGoodReads(book2)
+    driver.searchFromGoodReads(book3)
 try:
    #testAddBook()
-   testSearch()
+   #testSearch()
+   testGoodReadAPI()
 except RuntimeError:
     print("rasied an excpetion")

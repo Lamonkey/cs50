@@ -6,6 +6,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, session
 from flask_session import Session
+import requests
 class Controller():
     url = "postgres://gcztxtbtaigjma:c24730296b530720e4f729653533f73e373084ce256f965ff007f13013bf2f7b@ec2-54-236-169-55.compute-1.amazonaws.com:5432/d3kqjb70c0l7tc"
     def __init__(self):
@@ -79,8 +80,15 @@ class Controller():
         for book in result:
             print(f"isbn is {book.isbn}, title is:{book.title},author is:{book.author}")
         
-         
-        
+    def searchFromGoodReads(self,book):
+        key = "Vmv1YB4RVAVM96pb40FIsg"
+        isbn = book.isbn
+        res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": key, "isbns": isbn})
+        if res.status_code == 200:
+            print("find this book")
+        else:
+            print("Couldn't find book with this isbn from good read")
+
          
      
             
