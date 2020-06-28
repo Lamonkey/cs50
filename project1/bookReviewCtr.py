@@ -2,6 +2,7 @@ from Book import Book
 from User import User
 from Review import Review
 import os
+import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from flask import Flask, session
@@ -55,6 +56,7 @@ class Controller():
             {"title":book.title, "author":book.author, "year":book.year, "isbn":book.isbn,"reviewCount":book.reviewCount, "aveScore":book.aveScore})
             self.db.commit()
         except Exception:
+            self.db.commit()
             print("book can't not be imported")
     def addReview(self,input,book):
         try:
@@ -85,7 +87,13 @@ class Controller():
         isbn = book.isbn
         res = requests.get("https://www.goodreads.com/book/review_counts.json", params={"key": key, "isbns": isbn})
         if res.status_code == 200:
+            book.reviewCount = json.loads(res.text)["books"][0]['text_reviews_count']
+            book.aveScore = json.loads(res.text)["books"][0]['average_rating']
+            #update to data to data base
+            self.db.execute("UPDATE books SET review_count = :reviewCount, average_score = :aveScore WHERE isbn = :isbn;",
+            {"reviewCount" : book.reviewCount, "aveScore" : book.aveScore, "isbn" : book.isbn})
             print("find this book")
+            self.db.commit()
         else:
             print("Couldn't find book with this isbn from good read")
 
